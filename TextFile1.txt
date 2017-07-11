@@ -1,0 +1,52 @@
+﻿find all page procedure:
+1.  append /archive  at the page
+2. find the string curpage= "<a id="next_page_link" href="/archive?before_time=1483436380">Next page""
+3. from  curpage find the "next_page_link"  <a id one by one.
+
+find video procedure:
+1 . in 
+
+
+获取文件名： System.IO.Path.GetFileName(URLAddress));
+
+那我们要如何C#实现获取程序实时下载速度
+
+首先，在下载文件的时候，我们不用DownloadFile()方法进行下载，用WebResponse的GetResponseStream()流进行下载，设一个临时储存变量用来保存不断接收的数据。再用一个额外的独立计时器来分别根据时间间隔和临时收到数据量做计算，临时数据接收量在速度计算后会清空。
+
+下面开始代码：
+
+ 代码如下	复制代码
+string FileTemp=null;                                      //临时储存 
+private const int SPD_INTERVAL_SEC = 1;                    //时间常量 
+Stream stream = rps.GetResponseStream();                   //获取服务器响应文件流 
+byte[] byts = new byte[rps.ContentLength];                 //创建字节数组保存文件流 
+System.Threading.Timer FileTm = new System.Threading.Timer(SpeedTimer, null, 0, SPD_INTERVAL_SEC*1000);//使用回调函数，每SPD_INTERVAL_SEC秒执行一次 
+while ((count = stream.Read(byts, 0, 5000)) != 0) 
+{ 
+ FileTemp += count;      //临时储存长度 
+ strTemp += count;       //获取已下载文件长度 
+} 
+/// 
+///回调方法 
+/// 
+private void SpeedTimer(object state) 
+ { 
+ FileSpeed = FileTemp/SPD_INTERVAL_SEC;   //SPD_INTERVAL_SEC秒下载字节数, 
+ FileTemp = 0;                            //清空临时储存 
+ }
+ --------------------------------------
+
+ get size and type
+ 		 
+		     WebRequest request = WebRequest.Create (CurPage);
+			WebResponse response = request.GetResponse(); 
+ 	Console.WriteLine("\nContent length :{0}, Content Type : {1}", 
+                                         response.ContentLength, 
+                                         response.ContentType);            
+            // Release resources of response object.
+            response.Close();
+			output:
+			Content length :7938159, Content Type : video/mp4
+			----------------------------------------------
+			断点续传
+			http://www.cnblogs.com/ahjesus/archive/2011/05/26/2057934.html
