@@ -20,21 +20,19 @@ namespace tumblrCrawler
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string web = "http://berrygirls.tumblr.com/archive";
-            string allstr = string.Empty;
+
+            string web = tbInput.Text;
+            string pathstr = @"C:\Users\dan\Desktop\tumblr\";
             Parser media = new Parser();
             List<string> allpage = media.GetAllPageFromStartPoint(web);
+            media.ParseArchivePageToLinkList(allpage);
+            media.FetchMediaLists();
+            media.WritelIstsDataToFile(pathstr);
+            media.WritelIstsDataToFileCVS(pathstr);
 
-
-            string link = string.Empty;
-            foreach ( string a in allpage)
-            {
-                link += string.Format("{0}\r\n", a);
-            }
-            System.IO.File.WriteAllText(@"C:\Users\dan\Desktop\var.text", link);
             MessageBox.Show(string.Format("thie link size is {0}", allpage.Count));
         }
 
 
     }
-    }
+}

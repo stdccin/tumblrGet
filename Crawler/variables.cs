@@ -8,7 +8,15 @@ namespace tumblrCrawler.MediaParse
 {
     public partial class Parser
     {
-        private WebClient QueryWebClient = new WebClient() { Encoding = System.Text.Encoding.UTF8 };
+
+
+        private object lockobj_archiveImgLink = new object();  //use lock for convient, avoid .net 4 specify ConcurrentBag
+        private object lockobj_archiveVideoLink = new object();  //use lock for convient, avoid .net 4 specify ConcurrentBag
+        private List<ArchivePageLinkStruct> lsArchivePageImgLink = new List<ArchivePageLinkStruct>();
+        private List<ArchivePageLinkStruct> lsArchivePageVideoLink = new List<ArchivePageLinkStruct>();
+
+        private List<MediaStruct> lsMediaStructVideos = new List<MediaStruct>();
+        private List<MediaStruct> lsMediaStrutImgs = new List<MediaStruct>();
 
         #region  regex:--Img  relate--
         /// <summary>
@@ -19,7 +27,7 @@ namespace tumblrCrawler.MediaParse
         /// </summary>
         private static Regex regexArchiveImgItem = new Regex(regstrArchivePageLinkImgPage);
         /// <summary>
-        /// group[1] is imgaddr
+        /// group[4] is imgaddr
         /// this is for signleImg Style
         /// </summary>
         private static Regex regexImgPageToSingleImgLink = new Regex(regstrImgPageLinkToPicAddr);
@@ -43,17 +51,16 @@ namespace tumblrCrawler.MediaParse
         /// group[4]:  hot degree
         /// </summary>
         private static Regex regexArchivePageVideoItem= new Regex(regstrArchivePageVideoItem);
-
         /// <summary>
         /// group[1]:  address of the Video Page
-        /// find iframe src then use it to find the address
+        /// find iframe src then use it to find the address of video page
         /// </summary>
         private static Regex regexVideoPageIframeLink = new Regex(regstrVideoPageiframeToVideoPage);
         /// <summary>
-        /// group[1]:  real address of the file  
+        /// group[1]:  address of the video file, use response head to identify the real address
         /// group[2]:  postfix of the file
         /// </summary>
-        static string regexVideoIframeToVideoLink = "<source src=\"(https?://.+?)\" type=\"video/(.+?)\"";
+        static Regex regexVideoiframeLinkToVideoAddr = new Regex(regstrVideoiframeLinkToVideoAddr);
         #endregion
         #region regex:--Pages--relate
         /// <summary>

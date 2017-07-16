@@ -50,3 +50,10 @@ private void SpeedTimer(object state)
 			----------------------------------------------
 			断点续传
 			http://www.cnblogs.com/ahjesus/archive/2011/05/26/2057934.html
+--------------------------------------------------
+Event
+			AutoResetEvent 
+		automatically reset to non-signaled by the system after a single waiting thread has been released. If no threads are waiting, the event object's state remains signaled.
+			ManualResetEvent 
+		remains signaled until it is manually reset. 
+

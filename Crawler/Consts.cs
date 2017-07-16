@@ -19,16 +19,18 @@ namespace tumblrCrawler.MediaParse
         /// group[1] is the address of Img 
         /// note the \\r?\\n  for unix and windows compatibility
         /// </summary>
-        static string regstrImgPageLinkToPicAddr = "<a href=\"https?://.+?\">\\r?\\n\\s+<img src=\"(https?://.+?)\"";
+        //     static string regstrImgPageLinkToPicAddr = "<a href=\"https?://.+?\">\\r?\\n\\s+<img src=\"(https?://.+?)\"";
+        static string regstrImgPageLinkToPicAddr = "((<a href=\"https?://.+?\">)|(<div class=\"photo-wrapper-inner\">))\\r?\\n\\s+<img src=\"(https?://.+?)\"";
         /// <summary>
         /// group[1]: link to  real Imgs Page. format is "/post/....." 
         /// </summary>
-        static string regstrImgPageIframeLink = "src=\"(/post/.+photoset_iframe.+)\"\\r?\\n\\s+></iframe></div>";
+        static string regstrImgPageIframeLink = "<iframe\\r?\\n\\s+id=\"photoset_iframe_.+\\r?\\n\\s+class=\"photoset\".+\\r?\\n\\s+.+src=\"(/post/.+)\"\\r?\\n\\s+></iframe></div>";
         /// <summary>
         ///group[1]: the ImgAddr
         ///group[2]: thumbnial ImgAddr
+        /// use foreach to retrive all Img Link
         /// </summary>
-        static string regstrIframeToMultiImgLink = "<a\\r?\\n\\s+href=\"(.+?)\" class=\"photoset_photo.+><img\\r?\\n.+\\r?\\n.+\\r?\\n.+\\r?\\n\\s+src=\"(.+?)\"";
+        static string regstrIframeToMultiImgLink = "<a\\r?\\n\\s+href=\"(.+?)\"\\sclass=\"photoset_photo.+><img\\r?\\n.+\\r?\\n.+\\r?\\n.+\\r?\\n\\s+src=\"(.+?)\"";
         #endregion
         #region  regstr  --Video---
         /// <summary>
@@ -47,7 +49,7 @@ namespace tumblrCrawler.MediaParse
         /// group[1] is the real address of the file  
         /// group[2] is the postfix of the file
         /// </summary>
-        static string RegStrVideoiframeLinkToVideoAddr = "<source src=\"(https?://.+?)\" type=\"video/(.+?)\"";
+        static string regstrVideoiframeLinkToVideoAddr = "<source src=\"(https?://.+?)\" type=\"video/(.+?)\"";
         #endregion
         #region  regstr  --Page--
         static string regstrHomePage = @"(^https?://\w+\.tumblr\.com/?$)|(^https?://\w+\.tumblr\.com/archive/?$)";
@@ -56,7 +58,8 @@ namespace tumblrCrawler.MediaParse
                         "<a id=\"next_page_link\" href=\"(/archive\\?before_time=\\d+)\">((Next page)|(下一页)) &rarr;</a>";
         #endregion
         #region webclient 
-        static int webclientWebExceptionMaxRetry = 3;
+        static int WebExceptionMaxRetry = 3;
+        static int WebExRetryTimeDeny = 10000;
 
         #endregion
 

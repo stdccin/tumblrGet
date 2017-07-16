@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace tumblrCrawler.MediaParse
 {
@@ -14,6 +15,7 @@ namespace tumblrCrawler.MediaParse
         /// </summary>
         public struct ArchivePageLinkStruct
         {
+            public string HomePage;
             public string PageLink;
             public string ThumbnailAddr;
             public int HotDegree;
@@ -26,12 +28,20 @@ namespace tumblrCrawler.MediaParse
         /// </summary>
         public struct MediaStruct
         {
+            public string HomePage;
             public string ThumbnailAddr;
             public DateTime CreateDate;
             public int HotDegree;
             public MediaType Type;
             public string FileAddr;
+            public string ETag;
             public string Parameter;
+            public long size;
+        }
+        struct FetchListFromArchivePageAddrStruct
+        {
+            public ManualResetEvent evnt;
+            public string webpageaddr;
         }
 
 
